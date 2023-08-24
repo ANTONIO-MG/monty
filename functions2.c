@@ -12,7 +12,7 @@ void open_file(char *filename)
 
 		if (file == NULL)
 		{
-				printf("Error: Can't open file %s\n", filename);
+				fprintf(stderr, "Error: Can't open file %s\n", filename);
 				exit(EXIT_FAILURE);
 		}
 		else
