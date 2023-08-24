@@ -3,12 +3,13 @@
 /**
  * main - executes the monty interpretor
  * @argc: argument count
- * @argv: argument vector
+ * : argument vector
  *
  * Return: 0 on success and other numbers on failure.
  */
 int main(int argc, char **argv)
 {
+
 		if (argc != 2)
 		{
 				fprintf(stderr, "USAGE: monty file\n");
