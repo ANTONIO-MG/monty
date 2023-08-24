@@ -1,2 +1,1 @@
-# monty
-Monty Interpretor
+MONTY
