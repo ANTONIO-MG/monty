@@ -35,13 +35,13 @@ void execute(FILE *file)
 		char *command;
 		char *func;
 		int data;
-		int linenum = 0;
+		int linenum = 1;
 		stack_t *head = NULL;
 
 		while (fgets(line, sizeof(line), file))
 		{
 				linenum++;
-				command = strtok(line, " \t\r\n\a");
+				command = strtok(line, " *\\t\r\n\a");
 				if (command == NULL)
 						continue;
 				else if (strcmp(command, "pall") == 0)
@@ -76,6 +76,11 @@ stack_t *run(char *func, int data, stack_t *head, int linenum)
 		{
 				temp_head = push(head, data, linenum);
 		}
+		else
+		{
+				fprintf(stderr, "L%d: unknown instruction %s", linenum, func);
+				exit(EXIT_FAILURE);
+		}
 
 		return (temp_head);
 }
@@ -100,7 +105,7 @@ stack_t *push(stack_t *head, int data, int linenum)
 
 		if (new == NULL)
 		{
-				fprintf(stderr, "malloc failed\n");
+				fprintf(stderr, "Error: malloc failed\n");
 				exit(EXIT_FAILURE);
 		}
 

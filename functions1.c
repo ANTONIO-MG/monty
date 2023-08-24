@@ -10,14 +10,17 @@ stack_t *pall(stack_t *head)
 {
 		stack_t *mover = head;
 
-		while (mover->next != NULL)
+		while (mover->next)
+		{
+				printf("%d\n", mover->n);
 				mover = mover->next;
+		}
 
-		while (mover != NULL)
+		/*while (mover != NULL)
 		{
 				printf("%d\n", mover->n);
 				mover = mover->prev;
-		}
+		}*/
 
 		return (head);
 }

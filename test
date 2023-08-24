@@ -1,4 +1,4 @@
-push 3$
-push          2i can add all i want
 push 1$
+push 2$
+push 3$
 pall
