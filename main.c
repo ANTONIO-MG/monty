@@ -3,7 +3,7 @@
 /**
  * main - executes the monty interpretor
  * @argc: argument count
- * : argument vector
+ * @argv: argument vector
  *
  * Return: 0 on success and other numbers on failure.
  */
