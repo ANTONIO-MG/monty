@@ -27,14 +27,14 @@ void pint(stack_t **stack, unsigned int line_n)
  */
 void execute(stack_t **stack, char *opcode, int line_n, instruction_t inst[])
 {
-		int i = 0;\
+		int i = 0;
 		int check = 0;
 
 		while (i < 7)
 		{
 				if (strcmp(inst[i].opcode, opcode) == 0)
 				{
-						inst[i].f(stack, line_n);
+					inst[i].f(stack, line_n);
 						check = 1;
 				}
 				i++;

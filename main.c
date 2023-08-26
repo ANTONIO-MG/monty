@@ -8,7 +8,6 @@
  */
 int main(int argc, char **argv)
 {
-		int data = 0;
 		FILE *file;
 		char line[100], opcode[100];
 		unsigned int line_n = 0;
@@ -41,7 +40,6 @@ int main(int argc, char **argv)
 		{
 				line_n++;
 				sscanf(line, "%[a-zAZ] %d", opcode, &data);
-				printf("%d\n", data);
 				execute(&stack, opcode, line_n, inst);
 		}
 		free_list(stack);
