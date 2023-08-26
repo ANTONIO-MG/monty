@@ -35,11 +35,19 @@ typedef struct instruction_s
 		void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void open_file(char *filename);
-void execute(FILE *file);
-stack_t *run(char *func, int data, stack_t *head, int linenum);
-stack_t *push(stack_t *head, int data, int linenum);
-stack_t *pall(stack_t *head);
+/* prototypes of the functions */
+void push(stack_t **stack, unsigned int line_ni);
+void pall(stack_t **stack, unsigned int line_n);
+void pint(stack_t **stack, unsigned int line_n);
+void pop(stack_t **stack, unsigned int line_n);
+void swap(stack_t **stack, unsigned int line_n);
+void add(stack_t **stack, unsigned int line_n);
+void nop(stack_t **stack, unsigned int line_n);
+void execute(stack_t **stack, char *opcode, int line_n, instruction_t inst[]);
+stack_t *createNode(int data);
 void free_list(stack_t *head);
+void check(char line[]);
+
+int data;
 
 #endif /* MAIN_H */

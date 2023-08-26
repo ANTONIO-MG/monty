@@ -1,122 +1,125 @@
 #include "monty.h"
 
 /**
- * open_file - opens the .m file with teh opcode
- * @filename: name of the file to be opened
- *
+ * push - pushes data on top[ of the stack]
+ * @stack: the head of the steck
+ * @line_n: the current line opcode being executed
  * Return: void.
  */
-void open_file(char *filename)
+void push(stack_t **stack, unsigned int line_n)
 {
-		FILE *file = fopen(filename, "r");
+		stack_t *new;
 
-		if (file == NULL)
+		line_n += 1;
+
+		new = createNode(data);
+
+		if (*stack == NULL)
 		{
-				fprintf(stderr, "Error: Can't open file %s\n", filename);
-				exit(EXIT_FAILURE);
+				*stack = new;
 		}
 		else
 		{
-				execute(file);
+				new->next = *stack;
+				(*stack)->prev = new;
+				*stack = new;
 		}
 
-		fclose(file);
+		line_n -= 1;
 }
 
 /**
- * execute - executes the instructions in the opcode
- * @file: name of the file to be opened
- *
+ * pop - pops the top element of the stack
+ * @stack: the head of the steck
+ * @line_n: the current line opcode being executed
  * Return: void.
  */
-void execute(FILE *file)
+void pop(stack_t **stack, unsigned int line_n)
 {
-		char line[100];
-		char *command;
-		char *func;
-		int data;
-		int linenum = 1;
-		stack_t *head = NULL;
+		stack_t *temp;
 
-		while (fgets(line, sizeof(line), file))
+		if (*stack == NULL)
 		{
-				linenum++;
-				command = strtok(line, " *\\t\r\n\a");
-				if (command == NULL)
-						continue;
-				else if (strcmp(command, "pall") == 0)
-				{
-						head = pall(head);
-						break;
-				}
-				func = command;
-				command = strtok(NULL, "\t\r\n\a");
-				data = atoi(command);
-
-				head = run(func, data, head, linenum);
+				fprintf(stderr, "L%u: can't pop an empty stack\n", line_n);
+				exit(EXIT_FAILURE);
 		}
 
-		free_list(head);
+		temp = *stack;
+
+		*stack = (*stack)->next;
+
+		if (*stack != NULL)
+				(*stack)->prev = NULL;
+
+		free(temp);
 }
 
 /**
- * run - runs the specific command in the opcode
- * @func: the function to be executed
- * @data: data to be stored in the node
- * @head: the head of the list
- * @linenum: line number of the command being called
- *
- * Return: the head node.
+ * pall - prints all the elements of the stack
+ * @stack: the head of the steck
+ * @line_n: the current line opcode being executed
+ * Return: void.
  */
-stack_t *run(char *func, int data, stack_t *head, int linenum)
+void pall(stack_t **stack, unsigned int line_n)
 {
-		stack_t *temp_head = NULL;
+		stack_t *current;
 
-		if (strcmp(func, "push") == 0)
+		if (*stack == NULL)
 		{
-				temp_head = push(head, data, linenum);
-		}
-		else
-		{
-				fprintf(stderr, "L%d: unknown instruction %s", linenum, func);
-				exit(EXIT_FAILURE);
+				fprintf(stderr, "Stack is empty.\n");
+				return;
 		}
 
-		return (temp_head);
+		line_n += 1;
+
+		current = *stack;
+
+		line_n -= 1;
+
+		while (current != NULL)
+		{
+				printf("%d\n", current->n);
+				current = current->next;
+		}
 }
 
 /**
- * push - pushes the data to the top of the stack
- * @data: data to be stored in the node
- * @head: the head of the list
- * @linenum: line number of the command being called
- *
- * Return: the new node.
+ * add - adds the two elements of the stack together
+ * @stack: the head of the steck
+ * @line_n: the current line opcode being executed
+ * Return: void.
  */
-stack_t *push(stack_t *head, int data, int linenum)
+void add(stack_t **stack, unsigned int line_n)
 {
-		stack_t *new = malloc(sizeof(stack_t));
+		int sum;
+		stack_t *temp;
 
-		if (data == 0)
+		if (*stack == NULL || (*stack)->next == NULL)
 		{
-				fprintf(stderr, "L%d: usage: push integer\n", linenum);
+				fprintf(stderr, "L%d: can't add, stack too short\n", line_n);
 				exit(EXIT_FAILURE);
 		}
 
-		if (new == NULL)
-		{
-				fprintf(stderr, "Error: malloc failed\n");
-				exit(EXIT_FAILURE);
-		}
+		sum = (*stack)->n + (*stack)->next->n;
 
-		new->n = data;
-		new->prev = NULL;
-		new->next = head;
+		temp = *stack;
 
-		if (head != NULL)
-		{
-				head->prev = new;
-		}
+		*stack = (*stack)->next;
+		(*stack)->n = sum;
+		(*stack)->prev = NULL;
 
-		return (new);
+		free(temp);
+}
+
+/**
+ * nop - doies nothing art all
+ * @stack: the head of the steck
+ * @line_n: the current line opcode being executed
+ * Return: void.
+ */
+void nop(stack_t **stack, unsigned int line_n)
+{
+
+		(*stack)->n += line_n - line_n;
+
 }
